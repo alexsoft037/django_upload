@@ -2,7 +2,8 @@ class FileUpload {
 
     constructor(input) {
         this.input = input
-        this.max_length = 1024 * 1024 * 8000;
+        this.max_length = 1024 * 1024 * 10;
+        this.uploadFileName = '';
     }
 
     create_progress_bar() {
@@ -30,6 +31,7 @@ class FileUpload {
         this.upload_file(0, null);
     }
 
+    
     //upload file
     upload_file(start, model_id) {
         var end;
@@ -44,9 +46,15 @@ class FileUpload {
         } else {
             end = 0;
         }
+        if(start == 0) {
+            var d=new Date();
+            var milSec = d.getTime();
+            this.uploadFileName = milSec + this.file.name;
+            
+        }
         formData.append('file', currentChunk)
-        formData.append('filename', this.file.name)
-        $('.filename').text(this.file.name)
+        formData.append('filename', this.uploadFileName)
+        $('.filename').text(this.uploadFileName)
         $('.textbox').text("Uploading file")
         formData.append('end', end)
         formData.append('existingPath', existingPath);
@@ -84,24 +92,14 @@ class FileUpload {
                 alert(xhr.statusText);
             },
             success: function (res) {
-                console.log(res);
                 if (nextChunk < self.file.size) {
                     // upload file in chunks
                     existingPath = res.existingPath
-                    self.upload_file(nhhjh45extChunk, existingPath);
+                    self.upload_file(nextChunk, existingPath);
                 } else {
                     // upload complete
-                    // $('.textbox').text(res.data);
-                    var video_url = '/static/upload/' + res.existingPath;
-                    // alert(res.data);
-                    console.log(res.data);
-                    document.getElementById('uploaded_files').style.display = 'none';
-                    $("#display_video").show();
-                    $("#display_video").append(
-                        `<video autoplay="autoplay" controls="controls" preload="preload">
-                            <source src="`+video_url+`" id="video_url" type="video/mp4"></source>
-                        </video>`
-                    );
+                    $('.textbox').text(res.data);
+                    alert(res.data)
                 }
             }
         });
@@ -112,7 +110,6 @@ class FileUpload {
     $('#submit').on('click', (event) => {
         event.preventDefault();
         var uploader = new FileUpload(document.querySelector('#fileupload'))
-        console.log(document.querySelector('#fileupload'));
         uploader.upload();
     });
 })(jQuery);
@@ -140,4 +137,9 @@ ondrop = function(evt) {
     uploader.upload();
 };
 
+$('#dropBox')
+    .on('dragover', ondragover)
+    .on('dragenter', ondragenter)
+    .on('dragleave', ondragleave)
+    .on('drop', ondrop);
 

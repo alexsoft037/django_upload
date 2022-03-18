@@ -16,7 +16,7 @@ def index(request):
             return res
         else:
             if existingPath == 'null':
-                path = 'static/upload/' + fileName
+                path = 'media/' + fileName
                 with open(path, 'wb+') as destination: 
                     destination.write(file)
                 FileFolder = File()
@@ -29,4 +29,25 @@ def index(request):
                 else:
                     res = JsonResponse({'existingPath': fileName})
                 return res
+
+            else:
+                path = 'media/' + existingPath
+                model_id = File.objects.get(existingPath=existingPath)
+                if model_id.name == fileName:
+                    if not model_id.eof:
+                        with open(path, 'ab+') as destination: 
+                            destination.write(file)
+                        if int(end):
+                            model_id.eof = int(end)
+                            model_id.save()
+                            res = JsonResponse({'data':'Uploaded Successfully','existingPath':model_id.existingPath})
+                        else:
+                            res = JsonResponse({'existingPath':model_id.existingPath})    
+                        return res
+                    else:
+                        res = JsonResponse({'data':'EOF found. Invalid request'})
+                        return res
+                else:
+                    res = JsonResponse({'data':'No such file exists in the existingPath'})
+                    return res
     return render(request, 'upload.html')

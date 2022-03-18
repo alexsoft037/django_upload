@@ -46,10 +46,7 @@ but I wasn't able to guess what the PUT or POST calls should look like, and I se
 ### Nginx Module
 I at first didn't like the idea of having a file uploaded directly to my server, but actually
 you can integrate authentication at several levels so my concern was assuaged. For this demo I won't
-implement any kind of authentication, but I'll point you to resources to figure it out (I would
-imagine the authentication schema / details would vary based on the use case).
-
-
+implement any kind of authentication, but I'll point you to resources to figure it out (I wouldclient_body_timeout
 # Usage
 
 I've provided the application Dockerized so you don't need to install dependencies, beyond using Docker.
