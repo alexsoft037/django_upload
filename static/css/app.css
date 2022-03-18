@@ -24,3 +24,11 @@ small {
     margin-top: 0;
     color: black;
 }
+
+#display_video {
+    padding-top: 20px;
+}
+
+#display_video  video{
+    width: 100%;
+}

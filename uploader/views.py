@@ -16,7 +16,7 @@ def index(request):
             return res
         else:
             if existingPath == 'null':
-                path = 'media/' + fileName
+                path = 'static/upload/'+ fileName
                 with open(path, 'wb+') as destination: 
                     destination.write(file)
                 FileFolder = File()
@@ -31,7 +31,7 @@ def index(request):
                 return res
 
             else:
-                path = 'media/' + existingPath
+                path = 'static/upload/' + existingPath
                 model_id = File.objects.get(existingPath=existingPath)
                 if model_id.name == fileName:
                     if not model_id.eof:

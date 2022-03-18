@@ -97,9 +97,14 @@ class FileUpload {
                     existingPath = res.existingPath
                     self.upload_file(nextChunk, existingPath);
                 } else {
-                    // upload complete
-                    $('.textbox').text(res.data);
-                    alert(res.data)
+                    var video_url = '/static/upload/' + res.existingPath;
+                    document.getElementById('uploaded_files').style.display = 'none';
+                    $("#display_video").show();
+                    $("#display_video").html(
+                        `<video autoplay="autoplay" controls="controls" preload="preload">
+                            <source src="`+video_url+`" id="video_url" type="video/mp4"></source>
+                        </video>`
+                    );
                 }
             }
         });
